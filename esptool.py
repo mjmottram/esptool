@@ -398,24 +398,32 @@ class ESPLoader(object):
         #
         # DTR & RTS are active low signals,
         # ie True = pin @ 0V, False = pin @ VCC.
-        if mode != 'no_reset':
-            self._setDTR(False)  # IO0=HIGH
-            self._setRTS(True)   # EN=LOW, chip in reset
-            time.sleep(0.1)
-            if esp32r0_delay:
-                # Some chips are more likely to trigger the esp32r0
-                # watchdog reset silicon bug if they're held with EN=LOW
-                # for a longer period
-                time.sleep(1.2)
-            self._setDTR(True)   # IO0=LOW
-            self._setRTS(False)  # EN=HIGH, chip out of reset
-            if esp32r0_delay:
-                # Sleep longer after reset.
-                # This workaround only works on revision 0 ESP32 chips,
-                # it exploits a silicon bug spurious watchdog reset.
-                time.sleep(0.4)  # allow watchdog reset to occur
-            time.sleep(0.05)
-            self._setDTR(False)  # IO0=HIGH, done
+        if True:
+            print("Press Boot and Reset")
+            time.sleep(6)
+            print("Hold just Boot")
+            time.sleep(3)
+            print("Release Boot")
+            time.sleep(3)
+        else:
+            if mode != 'no_reset':
+                self._setDTR(False)  # IO0=HIGH
+                self._setRTS(True)   # EN=LOW, chip in reset
+                time.sleep(0.1)
+                if esp32r0_delay:
+                    # Some chips are more likely to trigger the esp32r0
+                    # watchdog reset silicon bug if they're held with EN=LOW
+                    # for a longer period
+                    time.sleep(1.2)
+                self._setDTR(True)   # IO0=LOW
+                self._setRTS(False)  # EN=HIGH, chip out of reset
+                if esp32r0_delay:
+                    # Sleep longer after reset.
+                    # This workaround only works on revision 0 ESP32 chips,
+                    # it exploits a silicon bug spurious watchdog reset.
+                    time.sleep(0.4)  # allow watchdog reset to occur
+                time.sleep(0.05)
+                self._setDTR(False)  # IO0=HIGH, done
 
         for _ in range(5):
             try:
